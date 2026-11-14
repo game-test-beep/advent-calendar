@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080e18">
+<meta name="description" content="12月1日から25日まで、日付をおすと末日聖徒イエス・キリスト教会のクリスマス動画やタバナクル合唱団の歌がひらくアドベントカレンダー。">
+<meta property="og:title" content="クリスマス・アドベントカレンダー">
+<meta property="og:description" content="毎日ひとつ、とびらをひらいてクリスマスをむかえましょう。">
+<style>
+html { -webkit-text-size-adjust: 100%; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+a, button, select { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+</style>
+<title>クリスマス・アドベントカレンダー</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<style>
+/* レイアウト：雪の窓辺に25個の「とびら」が並ぶ。上に星とみことば、下にとびらのグリッド。 */
+:root {
+  /* 冬の夜の街：このページは夜の見た目ひとつだけ */
+  color-scheme: dark;
+  --bg: #080e18;
+  --bg-deep: #1a2e46;
+  --ink: #eef4f8;
+  --ink-soft: #a9bdcc;
+  --paper: #15253a;
+  --line: #2f4963;
+  --berry: #e2566c;
+  --pine: #36997a;
+  --rose: #ff8fa0;
+  --mint: #86dcb9;
+  --butter: #ffd66b;
+  --blossom: #ffbfcd;
+  --snow: #f4f9fb;
+  --on-dark: #ffffff;
+  --on-light: #3a2a2f;
+  --star: #ffcf4d;
+  --flake: #dcecf5;
+  --shadow: rgba(0, 0, 0, .5);
+  --far: #14263b;
+  --near: #05090f;
+  --ground: #1b2d43;
+  --window: #ffd27a;
+  --moon: #f6edcf;
+  --display: "Mochiy Pop One", "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+}
+.scene { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+* { box-sizing: border-box; }
+body {
+  background: linear-gradient(var(--bg), var(--bg-deep)) fixed, var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100%;
+}
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-block: 36px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* 雪 */
+.snowfall { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.snowfall i {
+  position: absolute; top: -12px; border-radius: 50%;
+  background: var(--flake); opacity: .85;
+  animation: fall linear infinite;
+}
+@keyframes fall { to { transform: translate3d(24px, 105vh, 0); } }
+
+/* ヘッダー */
+header { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.star { width: 54px; height: 54px; fill: var(--star); filter: drop-shadow(0 3px 0 var(--shadow)); animation: twinkle 2.6s ease-in-out infinite; }
+@keyframes twinkle { 50% { transform: scale(1.12) rotate(8deg); } }
+h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 6vw, 3rem);
+  line-height: 1.3;
+  margin: 0;
+  text-wrap: balance;
+  color: var(--rose);
+  text-shadow: 0 3px 0 var(--shadow);
+}
+h1 span { color: var(--mint); display: inline-block; }
+.lead, .countdown, .progress, footer { text-shadow: 0 1px 2px var(--bg), 0 0 10px var(--bg), 0 0 18px var(--bg); }
+.lead { margin: 0; max-width: 34em; color: var(--ink-soft); font-weight: 500; }
+.verse {
+  margin: 6px 0 0;
+  padding: 14px 20px;
+  max-width: 36em;
+  background: var(--paper);
+  border: 2px dashed var(--line);
+  border-radius: 18px;
+  font-weight: 700;
+}
+.verse cite { display: block; font-style: normal; font-weight: 500; font-size: .85rem; color: var(--ink-soft); }
+.countdown { margin: 0; font-family: var(--display); font-size: 1.05rem; color: var(--mint); }
+
+/* 絞り込みと進みぐあい */
+.bar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button, .reset {
+  font: inherit; font-weight: 700; font-size: .9rem;
+  padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  border: 2px solid var(--line); background: var(--paper); color: var(--ink);
+}
+.filters button[aria-pressed="true"] { background: var(--pine); border-color: var(--pine); color: var(--on-dark); }
+.progress { margin: 0; font-weight: 700; color: var(--ink-soft); font-variant-numeric: tabular-nums; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.reset { font-size: .8rem; padding: 3px 10px; color: var(--ink-soft); }
+
+/* とびら */
+.grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
+.door {
+  position: relative;
+  display: flex; flex-direction: column; gap: 6px;
+  height: 100%; min-height: 190px; min-width: 0;
+  padding: 14px 14px 16px;
+  border-radius: 22px;
+  text-decoration: none;
+  background: var(--tile); color: var(--tile-ink);
+  box-shadow: 0 5px 0 var(--tile-edge), 0 12px 18px var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.door::before { /* リボンのような点線のふち */
+  content: ""; position: absolute; inset: 6px; border-radius: 17px;
+  border: 2px dashed currentColor; opacity: .28; pointer-events: none;
+}
+.c0 { --tile: var(--berry);   --tile-ink: var(--on-dark);  --tile-edge: #a92c42; }
+.c1 { --tile: var(--snow);    --tile-ink: var(--on-light); --tile-edge: #b9cfd8; }
+.c2 { --tile: var(--pine);    --tile-ink: var(--on-dark);  --tile-edge: #1f6a50; }
+.c3 { --tile: var(--butter);  --tile-ink: var(--on-light); --tile-edge: #d9a92f; }
+.c4 { --tile: var(--blossom); --tile-ink: var(--on-light); --tile-edge: #e48fa2; }
+.door:hover, .door:focus-visible { transform: translateY(-4px) rotate(-1.5deg); box-shadow: 0 9px 0 var(--tile-edge), 0 18px 24px var(--shadow); }
+.door:focus-visible { outline: 3px solid var(--star); outline-offset: 3px; }
+.door:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--tile-edge); }
+.top { display: flex; justify-content: space-between; align-items: flex-start; }
+.num { font-family: var(--display); font-size: 3rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.num small { font-size: .9rem; margin-left: 2px; }
+.pic { font-size: 2rem; line-height: 1; }
+.kind { align-self: flex-start; font-size: .72rem; font-weight: 700; letter-spacing: .04em; padding: 1px 9px; border-radius: 999px; border: 1.5px solid currentColor; }
+.name { font-weight: 700; font-size: .92rem; line-height: 1.45; overflow-wrap: anywhere; }
+.len { margin-top: auto; font-size: .8rem; font-weight: 500; opacity: .85; font-variant-numeric: tabular-nums; }
+.today .door { animation: bob 1.6s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-5px); } }
+.badge {
+  position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+  background: var(--star); color: var(--on-light);
+  font-family: var(--display); font-size: .75rem; padding: 1px 12px; border-radius: 999px; white-space: nowrap;
+}
+.seen .door::after {
+  content: "みたよ ✓"; position: absolute; right: 10px; bottom: 12px;
+  font-family: var(--display); font-size: .72rem; padding: 2px 9px; border-radius: 999px;
+  background: var(--tile-ink); color: var(--tile); transform: rotate(-6deg);
+}
+
+/* オルゴールBGMのボタン */
+.wrap { padding-bottom: 150px; }
+.player {
+  position: fixed; z-index: 5;
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px;
+  max-width: calc(100% - 32px);
+}
+.player select {
+  font-family: var(--body); font-weight: 700; font-size: .9rem;
+  max-width: 100%;
+  padding: 9px 12px; border-radius: 999px; cursor: pointer;
+  border: 3px solid var(--line); background: var(--paper); color: var(--ink);
+  box-shadow: 0 6px 14px var(--shadow);
+}
+.player select:focus-visible { outline: 3px solid var(--star); outline-offset: 3px; }
+.bgm {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-size: .95rem;
+  padding: 10px 18px; border-radius: 999px; cursor: pointer;
+  border: 3px solid var(--paper);
+  background: var(--berry); color: var(--on-dark);
+  box-shadow: 0 4px 0 #a92c42, 0 10px 18px var(--shadow);
+}
+.bgm[aria-pressed="true"] { background: var(--pine); box-shadow: 0 4px 0 #1f6a50, 0 10px 18px var(--shadow); }
+.bgm:focus-visible { outline: 3px solid var(--star); outline-offset: 3px; }
+.bgm-icon { font-size: 1.2rem; line-height: 1; }
+.bgm[aria-pressed="true"] .bgm-icon { animation: bob 1s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .bgm[aria-pressed="true"] .bgm-icon { animation: none; } }
+
+footer { text-align: center; font-size: .85rem; color: var(--ink-soft); display: flex; flex-direction: column; gap: 4px; }
+footer a { color: var(--mint); font-weight: 700; }
+
+@media (max-width: 560px) {
+  /* スマホ：オルゴールは画面の下に1行でおさめる */
+  .wrap { padding-bottom: 110px; }
+  .player { left: calc(12px + env(safe-area-inset-left, 0px)); right: calc(12px + env(safe-area-inset-right, 0px)); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); max-width: none; flex-wrap: nowrap; }
+  .player select { flex: 1 1 0; min-width: 0; font-size: .82rem; padding: 9px 10px; }
+  .bgm { flex: 0 0 auto; font-size: .85rem; padding: 9px 14px; white-space: nowrap; }
+  .lead { font-size: .95rem; }
+  .filters button { font-size: .82rem; padding: 6px 11px; }
+}
+@media (hover: none) {
+  .door:hover { transform: none; box-shadow: 0 5px 0 var(--tile-edge), 0 12px 18px var(--shadow); }
+}
+@media (max-width: 420px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .door { min-height: 176px; padding: 12px 12px 14px; }
+  .num { font-size: 2.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .snowfall { display: none; }
+  .star, .today .door { animation: none; }
+  .door { transition: none; }
+}
+</style>
+</head>
+<body>
+<canvas class="scene" id="scene" aria-hidden="true"></canvas>
+<div class="snowfall" id="snowfall" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header>
+    <svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7L2 8.8l7.1-.7z"/></svg>
+    <h1>クリスマス・<span>アドベントカレンダー</span></h1>
+    <p class="lead">12月1日から25日まで、毎日ひとつ「とびら」をひらいてみましょう。日付をおすと、末日聖徒イエス・キリスト教会のクリスマス動画や、タバナクル合唱団のクリスマスの歌がYouTubeでひらきます。</p>
+    <p class="verse">きょうダビデの町に、あなたがたのために救主がお生れになった。<cite>ルカによる福音書 2章11節</cite></p>
+    <p class="countdown" id="countdown"></p>
+  </header>
+
+  <div class="bar">
+    <div class="filters" role="group" aria-label="動画のしゅるい">
+      <button type="button" id="f-all" data-kind="all" aria-pressed="true">ぜんぶ</button>
+      <button type="button" id="f-sermon" data-kind="sermon" aria-pressed="false">説教・メッセージ</button>
+      <button type="button" id="f-choir" data-kind="choir" aria-pressed="false">タバナクル合唱団</button>
+      <button type="button" id="f-film"data-kind="film" aria-pressed="false">ショートムービー</button>
+      <button type="button" id="f-bible" data-kind="bible" aria-pressed="false">聖書のおはなし</button>
+    </div>
+    <p class="progress"><span id="count">ひらいたとびら 0 / 25</span><button type="button" class="reset" id="reset">さいしょから</button></p>
+  </div>
+
+  <ol class="grid" id="grid"></ol>
+
+  <footer>
+    <span>動画はすべて公式YouTubeチャンネル（イエス・キリスト教会／末日聖徒イエス・キリスト教会／The Tabernacle Choir at Temple Square）のものです。</span>
+    <span>リンクは新しいタブでひらきます。ひらいたとびらは、このブラウザにだけ記録されます。</span>
+  </footer>
+</div>
+
+<div class="player">
+  <select id="bgm-song" aria-label="オルゴールの曲をえらぶ"></select>
+  <button type="button" class="bgm" id="bgm" aria-pressed="false"><span class="bgm-icon" aria-hidden="true">♪</span><span id="bgm-label">オルゴールをならす</span></button>
+</div>
+
+<script>
+const KINDS = { sermon: "説教・メッセージ", choir: "タバナクル合唱団", film: "ショートムービー", bible: "聖書のおはなし" };
+const DAYS = [
+  ["H1upsP9ejeY", "film",   "🌟", "最初のクリスマス（Light The World 2025）", "3分"],
+  ["3-lzx2faWbA", "bible",  "👼", "キリストの誕生をマリヤに告げる天使", "4分"],
+  ["x0cZfKrSFtg", "sermon", "🕯️", "クリスマスの光 ― ネルソン大管長からのメッセージ", "3分"],
+  ["lmFh6QW7Q-8", "choir",  "🎄", "きよしこの夜（Silent Night）", "5分"],
+  ["0LapAvCOzCs", "film",   "🎁", "クリスマス ― 史上最高の物語に参加しよう", "1分"],
+  ["F9QHU0fBx6U", "film",   "❄️", "クリスマスに込められた意味（世界に、光を）", "4分"],
+  ["tWFegFgYjYc", "choir",  "🔔", "もろびとこぞりて（Joy to the World）", "2分"],
+  ["-rX6qngcOek", "film",   "🌍", "Light The World 2024：イエス・キリストの誕生がもたらす光", "2分"],
+  ["qyn1FgC_-To", "sermon", "🧦", "カーテン，満足そしてクリスマス", "13分"],
+  ["oI_iRQ2t-98", "bible",  "🐑", "キリストの誕生を告げ知らされる羊飼い", "3分"],
+  ["YIKBtE-vQg4", "choir",  "🎶", "天には栄え（Hark! The Herald Angels Sing）", "4分"],
+  ["bDrwhpG5p2E", "film",   "⛄", "Light The World 2025 クリスマスアニメーション", "1分"],
+  ["Tl5fcUQtLL4", "sermon", "✨", "イエス・キリストの光 ― ネルソン大管長からのクリスマスメッセージ", "4分"],
+  ["pdmlS049FIQ", "choir",  "🛎️", "キャロル・オブ・ザ・ベル（Carol of the Bells）", "3分"],
+  ["n5zFOHbpa3k", "film",   "🏙️", "タイムズスクエアでのクリスマス サプライズ", "2分"],
+  ["wdQT5dBlFK8", "film",   "🎀", "クリスマススペシャルムービー（日本版）", "2分"],
+  ["EE8HZHNXgHs", "choir",  "🎺", "神の御子は今宵しも（O Come, All Ye Faithful）", "5分"],
+  ["Iz8CoAFrhbg", "bible",  "💫", "大きな喜びをもたらす良い知らせ：イエス・キリストの誕生", "5分"],
+  ["qks0-dJzge0", "choir",  "🎻", "牧人ひつじを（The First Noel）", "5分"],
+  ["yx9C2CupAdY", "bible",  "🐫", "イエスを探す博士たち", "6分"],
+  ["TLS37BiyLMY", "film",   "💝", "世への贈り物（クリスマス・ディボーショナルより）", "9分"],
+  ["UArceTs1-G8", "choir",  "🕊️", "Angels, from the Realms of Glory（歌：デイヴィッド・アーチュレッタ）", "3分"],
+  ["7KmVIlpB5wY", "bible",  "🏠", "キリストの降誕", "8分"],
+  ["OgVD8oOV14E", "film",   "🌙", "メリークリスマス・イブ！", "1分"],
+  ["xfFKfbuYJgY", "film",   "👑", "幼な子キリスト ― 降誕の物語（本編）", "18分"]
+];
+const KEY = "advent-opened";
+const ORDER = [0, 1, 2, 3, 4, 2, 4, 0, 1, 3, 3, 0, 4, 2, 1, 1, 2, 3, 0, 4, 4, 3, 1, 2, 0];
+
+function load() { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; } }
+function save(list) { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} }
+
+let opened = load();
+const grid = document.getElementById("grid");
+const now = new Date();
+const todayNum = now.getMonth() === 11 && now.getDate() <= 25 ? now.getDate() : 0;
+
+DAYS.forEach((d, i) => {
+  const day = i + 1;
+  const li = document.createElement("li");
+  li.dataset.kind = d[1];
+  li.dataset.day = day;
+  if (day === todayNum) li.classList.add("today");
+  if (opened.includes(day)) li.classList.add("seen");
+  const a = document.createElement("a");
+  a.className = "door c" + ORDER[i];
+  a.href = "https://www.youtube.com/watch?v=" + d[0];
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.setAttribute("aria-label", "12月" + day + "日：" + d[3] + "（" + KINDS[d[1]] + "・" + d[4] + "）をYouTubeでひらく");
+  a.innerHTML =
+    (day === todayNum ? '<span class="badge">きょうのとびら</span>' : "") +
+    '<span class="top"><span class="num">' + day + '<small>日</small></span><span class="pic" aria-hidden="true">' + d[2] + "</span></span>" +
+    '<span class="kind">' + KINDS[d[1]] + "</span>" +
+    '<span class="name"></span>' +
+    '<span class="len">▶ ' + d[4] + "</span>";
+  a.querySelector(".name").textContent = d[3];
+  a.addEventListener("click", () => {
+    stopBgm();
+    if (!opened.includes(day)) { opened.push(day); save(opened); }
+    li.classList.add("seen");
+    showCount();
+  });
+  li.appendChild(a);
+  grid.appendChild(li);
+});
+
+function showCount() {
+  document.getElementById("count").textContent = "ひらいたとびら " + opened.length + " / 25";
+}
+showCount();
+
+document.getElementById("reset").addEventListener("click", () => {
+  opened = [];
+  save(opened);
+  grid.querySelectorAll(".seen").forEach((li) => li.classList.remove("seen"));
+  showCount();
+});
+
+document.querySelectorAll(".filters button").forEach((b) => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll(".filters button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    grid.querySelectorAll("li").forEach((li) => { li.hidden = b.dataset.kind !== "all" && li.dataset.kind !== b.dataset.kind; });
+  });
+});
+
+// オルゴールBGM（ブラウザの中で音をつくって鳴らす。曲はどれも古いクリスマスキャロル）
+// 曲は教会の賛美歌集のクリスマスの賛美歌。notes がメロディー、chords が伴奏の和音（数字は長さ）
+const ANGELS_VERSE = "E4:2 E4:2 E4:2 G4:2 G4:3 F4:1 E4:4 E4:2 D4:2 E4:2 G4:2 E4:3 D4:1 C4:4";
+const ANGELS_VERSE_CH = "C:8 G:4 C:4 C:16";
+const ANGELS_GLORIA = "G4:4 A4:1 G4:1 F4:1 E4:1 F4:4 G4:1 F4:1 E4:1 D4:1 E4:4 F4:1 E4:1 D4:1 C4:1 D4:3 G3:1 G3:4 C4:2 D4:2 E4:2 F4:2 E4:4 D4:4";
+const ANGELS_GLORIA_CH = "C:8 Dm:4 G:4 C:8 G:8 C:4 F:4 C:4 G:4";
+const NOEL_LINE = "E4:1 D4:1 C4:3 D4:1 E4:1 F4:1 G4:4 A4:1 B4:1 C5:2 B4:2 A4:2 G4:4 A4:1 B4:1 C5:2 B4:2 A4:2 G4:2 A4:2 B4:2 C5:2 G4:2 F4:2 E4:4";
+const NOEL_LINE_CH = "R:2 C:12 F:6 C:6 F:6 C:6 C:4 G:2 C:4";
+const SONGS = [
+  { name: "118 聖し，この夜", unit: 0.34, bar: 6, step: 1,
+    chords: "C:24 G:12 C:12 F:12 C:12 F:12 C:12 G:12 C:12 C:6 G:6 C:12", notes: "G4:3 A4:1 G4:2 E4:6 G4:3 A4:1 G4:2 E4:6 D5:4 D5:2 B4:6 C5:4 C5:2 G4:6 A4:4 A4:2 C5:3 B4:1 A4:2 G4:3 A4:1 G4:2 E4:6 A4:4 A4:2 C5:3 B4:1 A4:2 G4:3 A4:1 G4:2 E4:6 D5:4 D5:2 F5:3 D5:1 B4:2 C5:6 E5:6 C5:2 G4:2 E4:2 G4:3 F4:1 D4:2 C4:12" },
+  { name: "116 もろびと，こぞりて", unit: 0.14, bar: 8, step: 2,
+    chords: "C:16 C:4 G:4 C:8 F:8 G:8 C:56 G:16 C:4 F:4 C:6 G:2 C:4 G:4 C:8", notes: "C5:4 B4:3 A4:1 G4:6 F4:2 E4:4 D4:4 C4:6 G4:2 A4:6 A4:2 B4:6 B4:2 C5:6 C5:2 C5:2 B4:2 A4:2 G4:2 G4:3 F4:1 E4:2 C5:2 C5:2 B4:2 A4:2 G4:2 G4:3 F4:1 E4:2 E4:2 E4:2 E4:2 E4:2 E4:1 F4:1 G4:6 F4:1 E4:1 D4:2 D4:2 D4:2 D4:1 E4:1 F4:6 E4:1 D4:1 C4:2 C5:4 A4:2 G4:3 F4:1 E4:2 F4:2 E4:4 D4:4 C4:8" },
+  { name: "119 み使い空に", unit: 0.21, bar: 8, step: 1,
+    chords: [ANGELS_VERSE_CH, ANGELS_VERSE_CH, ANGELS_GLORIA_CH, ANGELS_GLORIA_CH, "C:8"].join(" "),
+    notes: [ANGELS_VERSE, ANGELS_VERSE, ANGELS_GLORIA, ANGELS_GLORIA, "C4:8"].join(" ") },
+  { name: "127 牧人，羊を", unit: 0.27, bar: 6, step: 1,
+    chords: [NOEL_LINE_CH, NOEL_LINE_CH, "R:2 C:12 F:6 C:6 F:6 C:6 C:4 G:2 C:10"].join(" "),
+    notes: [NOEL_LINE, NOEL_LINE, "E4:1 D4:1 C4:3 D4:1 E4:1 F4:1 G4:4 C5:1 B4:1 A4:4 A4:2 G4:6 C5:2 B4:2 A4:2 G4:2 A4:2 B4:2 C5:2 G4:2 F4:2 E4:10"].join(" ") }
+];
+const SEMI = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+const bgmBtn = document.getElementById("bgm");
+const bgmLabel = document.getElementById("bgm-label");
+let actx = null, master = null, voices = [], nextTimer = 0, songIndex = 0;
+
+const songSelect = document.getElementById("bgm-song");
+SONGS.forEach((s, i) => {
+  const opt = document.createElement("option");
+  opt.value = i;
+  opt.textContent = s.name;
+  songSelect.appendChild(opt);
+});
+
+function midiOf(note) { // オルゴールらしく1オクターブ上で鳴らす
+  return 12 * (Number(note.slice(-1)) + 2) + SEMI[note[0]];
+}
+function pluck(midi, t, vol, ring) {
+  const f = 440 * Math.pow(2, (midi - 69) / 12);
+  [[1, 0.24, 2.6], [2, 0.06, 1.2], [4.2, 0.03, 0.35]].forEach(([mult, v, len]) => {
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = "sine";
+    o.frequency.value = f * mult;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v * vol, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + len * ring);
+    o.connect(g).connect(master);
+    o.start(t);
+    o.stop(t + len * ring + 0.05);
+    voices.push(o);
+  });
+}
+function playSong() {
+  songIndex = songIndex % SONGS.length;
+  const song = SONGS[songIndex];
+  songSelect.value = songIndex;
+  bgmLabel.textContent = "とめる";
+  const begin = actx.currentTime + 0.15;
+  voices = [];
+  // メロディー
+  let t = begin;
+  song.notes.split(" ").forEach((token) => {
+    const [note, len] = token.split(":");
+    pluck(midiOf(note), t, 1, 1);
+    t += Number(len) * song.unit;
+  });
+  // 伴奏：和音を低い音からポロポロとばらして重ねる
+  let c = begin;
+  song.chords.split(" ").forEach((token) => {
+    const [name, lenText] = token.split(":");
+    const len = Number(lenText);
+    if (name !== "R") {
+      const root = 48 + SEMI[name[0]];
+      const third = name.endsWith("m") ? 15 : 16;
+      const pattern = [0, 7, third, 7, 12, 7, third, 7];
+      for (let k = 0; k < len; k += song.step) {
+        const pos = (k % song.bar) / song.step;
+        const at = c + k * song.unit;
+        if (pos === 0) { pluck(root, at, 0.8, 1.4); pluck(root + third, at, 0.3, 1.2); }
+        else pluck(root + pattern[pos % pattern.length], at, 0.42, 0.9);
+      }
+    }
+    c += len * song.unit;
+  });
+  nextTimer = setTimeout(() => { songIndex++; playSong(); }, (Math.max(t, c) - begin + 2) * 1000);
+}
+songSelect.addEventListener("change", () => {
+  songIndex = Number(songSelect.value);
+  if (!master) return;
+  clearTimeout(nextTimer);
+  voices.forEach((o) => { try { o.stop(); } catch (e) {} });
+  playSong();
+});
+function startBgm() {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) { bgmLabel.textContent = "このブラウザでは音が出せません"; return; }
+  if (!actx) actx = new AC();
+  actx.resume();
+  master = actx.createGain();
+  master.gain.value = 0.55;
+  const echo = actx.createDelay(), echoGain = actx.createGain();
+  echo.delayTime.value = 0.27;
+  echoGain.gain.value = 0.22;
+  master.connect(actx.destination);
+  master.connect(echo).connect(echoGain).connect(actx.destination);
+  bgmBtn.setAttribute("aria-pressed", "true");
+  playSong();
+}
+function stopBgm() {
+  if (!master) return;
+  clearTimeout(nextTimer);
+  voices.forEach((o) => { try { o.stop(); } catch (e) {} });
+  voices = [];
+  master.disconnect();
+  master = null;
+  bgmBtn.setAttribute("aria-pressed", "false");
+  bgmLabel.textContent = "オルゴールをならす";
+}
+bgmBtn.addEventListener("click", () => { master ? stopBgm() : startBgm(); });
+
+// クリスマスまでのカウントダウン
+(function () {
+  const el = document.getElementById("countdown");
+  const y = now.getFullYear();
+  const start = new Date(y, now.getMonth(), now.getDate());
+  let xmas = new Date(y, 11, 25);
+  if (start > xmas) xmas = new Date(y + 1, 11, 25);
+  const left = Math.round((xmas - start) / 86400000);
+  el.textContent = left === 0 ? "メリークリスマス！ 🎉" : "クリスマスまで あと " + left + " 日";
+})();
+
+// 冬の夜の街と木のシルエット（星・月・もみの木・家・教会）
+(function () {
+  const canvas = document.getElementById("scene");
+  const g = canvas.getContext("2d");
+  const css = getComputedStyle(document.documentElement);
+  const col = (name) => css.getPropertyValue(name).trim();
+
+  function fir(x, base, h) {
+    const w = h * 0.5;
+    g.fillRect(x - h * 0.03, base - h * 0.12, h * 0.06, h * 0.12);
+    for (let i = 0; i < 3; i++) {
+      const top = base - h + i * h * 0.24;
+      const half = w * (0.28 + i * 0.11);
+      g.beginPath();
+      g.moveTo(x, top);
+      g.lineTo(x + half, top + h * 0.42);
+      g.lineTo(x - half, top + h * 0.42);
+      g.closePath();
+      g.fill();
+    }
+  }
+
+  function draw() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = window.innerWidth, H = window.innerHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    g.clearRect(0, 0, W, H);
+    let seed = 20261225; // いつも同じ街並みになるように、決まった乱数を使う
+    const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+    const s = Math.max(0.62, Math.min(1.15, W / 900));
+
+    // 星
+    for (let i = 0; i < 110; i++) {
+      g.fillStyle = "rgba(255,255,255," + (0.25 + rnd() * 0.6) + ")";
+      g.beginPath();
+      g.arc(rnd() * W, rnd() * H * 0.72, 0.4 + rnd() * 1.2, 0, 7);
+      g.fill();
+    }
+    // 月
+    const mx = W * 0.86, my = Math.max(70, H * 0.13), mr = 28 * s;
+    const glow = g.createRadialGradient(mx, my, mr * 0.6, mx, my, mr * 4);
+    glow.addColorStop(0, "rgba(246,237,207,.35)");
+    glow.addColorStop(1, "rgba(246,237,207,0)");
+    g.fillStyle = glow;
+    g.fillRect(mx - mr * 4, my - mr * 4, mr * 8, mr * 8);
+    g.fillStyle = col("--moon");
+    g.beginPath(); g.arc(mx, my, mr, 0, 7); g.fill();
+
+    // 遠くの森
+    const farBase = H - 64 * s;
+    g.fillStyle = col("--far");
+    g.fillRect(0, farBase, W, H - farBase);
+    for (let x = -10; x < W + 40; x += (22 + rnd() * 34) * s) fir(x, farBase + 4, (70 + rnd() * 90) * s);
+
+    // 手前の街
+    const base = H - 30 * s;
+    const windows = [];
+    g.fillStyle = col("--near");
+    let x = 6 * s, chapelDone = false;
+    while (x < W) {
+      const r = rnd();
+      if (!chapelDone && x > W * 0.24) {
+        // 教会堂：尖塔つき
+        const bw = 120 * s, bh = 46 * s, tw = 24 * s, th = 84 * s;
+        g.fillRect(x, base - th, tw, th);
+        g.beginPath(); g.moveTo(x - 3 * s, base - th); g.lineTo(x + tw / 2, base - th - 64 * s); g.lineTo(x + tw + 3 * s, base - th); g.closePath(); g.fill();
+        g.fillRect(x + tw, base - bh, bw, bh);
+        g.beginPath(); g.moveTo(x + tw, base - bh); g.lineTo(x + tw + bw / 2, base - bh - 26 * s); g.lineTo(x + tw + bw + 4 * s, base - bh); g.closePath(); g.fill();
+        windows.push([x + tw / 2 - 3 * s, base - th + 14 * s, 6 * s, 14 * s]);
+        for (let i = 0; i < 4; i++) windows.push([x + tw + 16 * s + i * 25 * s, base - bh + 12 * s, 8 * s, 20 * s]);
+        x += tw + bw + 14 * s;
+        chapelDone = true;
+      } else if (r < 0.56) {
+        const w = (42 + rnd() * 34) * s, h = (30 + rnd() * 30) * s;
+        g.fillRect(x, base - h, w, h);
+        g.beginPath(); g.moveTo(x - 4 * s, base - h); g.lineTo(x + w / 2, base - h - w * 0.42); g.lineTo(x + w + 4 * s, base - h); g.closePath(); g.fill();
+        g.fillRect(x + w * 0.68, base - h - w * 0.4, 7 * s, w * 0.3);
+        for (let i = 0; i < 2; i++) if (rnd() < 0.75) windows.push([x + w * (0.2 + i * 0.42), base - h + 9 * s, 9 * s, 10 * s]);
+        x += w + (6 + rnd() * 16) * s;
+      } else {
+        const h = (56 + rnd() * 70) * s;
+        fir(x + h * 0.25, base + 2, h);
+        x += h * 0.5 + (2 + rnd() * 12) * s;
+      }
+    }
+    // 雪の地面
+    g.fillStyle = col("--ground");
+    g.fillRect(0, base, W, H - base);
+    g.fillStyle = "rgba(220,236,245,.22)";
+    g.fillRect(0, base, W, 2);
+    // あかりのついた窓
+    g.fillStyle = col("--window");
+    g.shadowColor = col("--window");
+    g.shadowBlur = 10 * s;
+    windows.forEach((w) => g.fillRect(w[0], w[1], w[2], w[3]));
+    g.shadowBlur = 0;
+  }
+
+  let timer = 0;
+  window.addEventListener("resize", () => { clearTimeout(timer); timer = setTimeout(draw, 120); });
+  draw();
+})();
+
+// 雪
+(function () {
+  const box = document.getElementById("snowfall");
+  for (let i = 0; i < 28; i++) {
+    const f = document.createElement("i");
+    const s = 4 + Math.random() * 7;
+    f.style.cssText = "left:" + Math.random() * 100 + "%;width:" + s + "px;height:" + s + "px;animation-duration:" +
+      (9 + Math.random() * 12) + "s;animation-delay:-" + Math.random() * 20 + "s;opacity:" + (0.45 + Math.random() * 0.5);
+    box.appendChild(f);
+  }
+})();
+</script>
+</body>
+</html>
